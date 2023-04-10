@@ -4,12 +4,12 @@ import nookies from 'nookies';
 import Router  from 'next/router';
 import { useState,useEffect } from 'react';
 import axios from 'axios';
+import { headers } from '@/next.config';
 
 
 
 export async function getServerSideProps(ctx){
     const cookies = nookies.get(ctx)
-  
     if(!cookies.token){
       return{
         redirect:{
@@ -18,7 +18,9 @@ export async function getServerSideProps(ctx){
       }
     }
     return{
-      props: {}
+      props: {
+      
+      }
     }
   }
 
@@ -34,9 +36,16 @@ export default function dashboard() {
   }
     const [data,setdata] = useState([]);
 
-
     useEffect(() => {
-      axios.get('http://localhost:3000/api/auth')
+      const cookie = nookies.get('token');
+      const cookies = cookie.token;
+      console.log(cookie.token);
+
+      const headers ={
+        'Authorization': `Bearer ${cookies}`,
+        'Content-Type': 'application/json',
+      };
+      axios.get('http://localhost:3000/api/user' ,{headers} )
         .then(response => {
           setdata(response.data);
         })
@@ -105,31 +114,6 @@ export default function dashboard() {
       const data = await res.json();
     };
 
-    // useEffect(() => {
-    //   var table = document.getElementById("table"),rIndex;
-    //   for(var i =0 ; i< table.rows.length; i++){
-    //     table.rows[i].onClick = function(){
-    //       rIndex = this.rowIndex;
-    //       console.log(rIndex);
-    //     }
-    //   }
-    // }, []);
-
-  
-
-    // const data_take = async (e) => {
-    //   e.preventDefault(); // prevent form from submitting normally
-    //   const res = await fetch('http://localhost:3000/api/auth', {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     }
-    //   });
-      
-    //   const json = await res.json();
-    //   setdata(json);
-    //   console.log(json);
-    // };
 
   return (
     <section className="antialiased bg-gray-100 text-gray-600 ">

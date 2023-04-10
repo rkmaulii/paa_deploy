@@ -54,17 +54,17 @@ export default async function handler(req, res) {
             //    res.status(200).json({ message: 'Login successful', token })
         return res.status(200).json({ message: 'account registered succesfully', token});
     }
-    else if (req.method === 'GET') {
+    // else if (req.method === 'GET') {
 
-        const user = await prisma.user.findMany({
-            orderBy: {
-                updatedAt: 'desc' // sort records by their updatedAt field in descending order
-              },
-        });
+    //     const user = await prisma.user.findMany({
+    //         orderBy: {
+    //             updatedAt: 'desc' // sort records by their updatedAt field in descending order
+    //           },
+    //     });
 
-        return res.send(user);
+    //     return res.send(user);
 
-     }
+    //  }
      else if (req.method === 'DELETE') {
         const { id } = req.body;
 

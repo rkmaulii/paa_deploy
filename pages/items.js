@@ -35,17 +35,23 @@ export default function dashboard() {
     const [data,setdata] = useState([]);
 
 
+    
     useEffect(() => {
-        
-      axios.get('http://localhost:3000/api/data')
+      const cookie = nookies.get('token');
+      const cookies = cookie.token;
+      console.log(cookie.token);
+
+      const headers ={
+        'Authorization': `Bearer ${cookies}`,
+        'Content-Type': 'application/json',
+      };
+      axios.get('http://localhost:3000/api/item' ,{headers} )
         .then(response => {
           setdata(response.data);
         })
         .catch(error => {
           console.log(error);
         });
-
-
     }, []);
 
 

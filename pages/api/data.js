@@ -4,17 +4,17 @@ import prisma from "@/lib/prisma";
 const JWT_SECRET = "My-Lover"
 
 export default async function handler(req, res) {
-    if (req.method === 'GET') {
-        const item = await prisma.item.findMany({
-            orderBy: {
-                updatedAt: 'desc' // sort records by their updatedAt field in descending order
-              },
-        });
+    // if (req.method === 'GET') {
+    //     const item = await prisma.item.findMany({
+    //         orderBy: {
+    //             updatedAt: 'desc' // sort records by their updatedAt field in descending order
+    //           },
+    //     });
 
-        return res.send(item);
+    //     return res.send(item);
 
-     }
-     else if (req.method === 'POST') {
+    //  }
+    if (req.method === 'POST') {
         const { token,name,category,price } = req.body;
         if(!token ){
             return res.status(400).json({ message: 'Token API tidak ada' });
