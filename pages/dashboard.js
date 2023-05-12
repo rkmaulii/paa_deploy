@@ -39,13 +39,13 @@ export default function dashboard() {
     useEffect(() => {
       const cookie = nookies.get('token');
       const cookies = cookie.token;
-      console.log(cookie.token);
+      // console.log(cookie.token);
 
       const headers ={
         'Authorization': `Bearer ${cookies}`,
         'Content-Type': 'application/json',
       };
-      axios.get('http://localhost:3000/api/user' ,{headers} )
+      axios.get('http://localhost:3000/api/item' ,{headers} )
         .then(response => {
           setdata(response.data);
         })
@@ -62,39 +62,38 @@ export default function dashboard() {
     };
     const handleButtonClick = (item) => {
       setName(item.name);
-      setEmail(item.email);
-      setPassword(item.password);
+      setPlace(item.place);
+      setTime(item.time);
       setId(item.id);
     };
 
-    const [email, setEmail] = useState('');
+    const [time, setTime] = useState('');
     const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
+    const [place, setPlace] = useState('');
     const [id, setId] = useState('');
 
     const Delete = async (e) => {
       e.preventDefault(); // prevent form from submitting normally
       alert('Akun Berhasil DIhapus!');
-      const res = await fetch('http://localhost:3000/api/auth', {
-        method: 'DELETE',
+      const res = await fetch('http://localhost:3000/api/data', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id,email, name, password })
+        body: JSON.stringify({ token:"My-Lover",id})
       });
-      
       const data = await res.json();
       location.reload();
     };
     const Update = async (e) => {
       e.preventDefault(); // prevent form from submitting normally
       alert('Akun Berhasil Di Update!');
-      const res = await fetch('http://localhost:3000/api/auth', {
+      const res = await fetch('http://localhost:3000/api/data', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id,email, name, password })
+        body: JSON.stringify({ id,time ,name, place,token:"My-Lover" })
       });
       location.reload();
       const data = await res.json();
@@ -103,96 +102,66 @@ export default function dashboard() {
     const Create = async (e) => {
       e.preventDefault(); // prevent form from submitting normally
       alert('Akun Berhasil Di Buat!');
-      const res = await fetch('http://localhost:3000/api/auth', {
-        method: 'PUT',
+      const res = await fetch('http://localhost:3000/api/data', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, name, password })
+        body: JSON.stringify({ time, name, place,token:"My-Lover" })
       });
-      location.reload();
       const data = await res.json();
+      console.log(data)
+      location.reload();
     };
 
 
   return (
-    <section className="antialiased bg-gray-100 text-gray-600 ">
+    <section className="antialiased  text-gray-600 ">
     <div className="flex flex-col justify-center h-full">
-    <div className='flex justify-between'>
-    <div className='mx-10 my-5'>
-        <button type="submit" onClick={menuitem} className="hover:shadow-form rounded-md bg-[#06b6d4] py-3 px-8 text-base font-semibold text-white outline-none">
-          Menu Item
-        </button>
-    </div>
-    <div className='mx-10 my-5'>
-        <button type="submit" onClick={logout} className="hover:shadow-form rounded-md bg-[#dc2626] py-3 px-8 text-base font-semibold text-white outline-none">
+    <div className='mx-10 my-5 flex justify-end'>
+        <button type="submit" onClick={logout} className="bg-[#dc2626] hover:shadow-form rounded-md  py-3 px-8 text-base font-semibold text-white outline-none">
           logout
         </button>
     </div>
-    </div>
-
-    <div className="flex items-center justify-center p-12">
-        {/* Author: FormBold Team */}
-        {/* Learn More: https://formbold.com */}
-        <div className="mx-auto w-full max-w-[550px]">
-          <form >
-            <div className="mb-5">
-              <label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
-                nama
-              </label>
-              <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-            </div>
-            <div className="mb-5">
-              <label htmlFor="email" className="mb-3 block text-base font-medium text-[#07074D]">
-                Email Address
-              </label>
-              <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="example@domain.com" className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-            </div>
-            <div className="mb-5">
-              <label htmlFor="subject" className="mb-3 block text-base font-medium text-[#07074D]">
-                Password
-              </label>
-              <input type="text" name="subject" id="subject" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your subject" className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-            </div>
-            <input type="hidden" value={id} ></input>
-            <div className='flex flex-row gap-8'>
-            <div>
-              <button type="submit" onClick={Create} className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
-                Create
-              </button>
-            </div>
-            <div>
-              <button type="submit" onClick={Update} className="hover:shadow-form rounded-md bg-[#4ade80] py-3 px-8 text-base font-semibold text-black outline-none">
-                Update
-              </button>
-            </div>
-            <div>
-              <button type="submit" onClick={Delete} className="hover:shadow-form rounded-md bg-[#dc2626] py-3 px-8 text-base font-semibold text-white outline-none">
-                Delete
-              </button>
-            </div>
-            </div>
-          </form>
-        </div>
-      </div>
+    <form className="px-4 py-3">
+          <div className="mb-3" style={{marginLeft: '50px', marginTop: '5px'}}>
+          <h1 style={{marginBottom: '2px', color:'#0F2C67' , fontSize: '40px'}}> Catatan Aktivitasmu</h1>
+          <h2 style={{fontSize: '15px', color:'#0F2C67',  marginBottom: '20px'}}> Please enter your activity data</h2>
+            <label htmlFor="time" className="form-label">Time:</label>
+            <input type="text" className="form-control" value={time} onChange={(e) => setTime(e.target.value)} id="exampleDropdownFormEmail1" placeholder="dd/mm/yy xx.xx AM/PM" style={{marginLeft: '31px'}} />
+          </div>
+          <div className="mb-3" style={{marginLeft: '50px', marginTop: '5px'}}>
+            <label htmlFor="exampleDropdownFormEmail1" className="form-label">Name:</label>
+            <input type="text" className="form-control" id="exampleDropdownFormEmail1" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your activity name" style={{marginLeft: '23px' }} />
+          </div>
+          <div className="mb-3" style={{marginTop: '5px', marginLeft: '50px'}}>
+            <label htmlFor="exampleDropdownFormPassword1" className="form-label">Place: </label>
+            <input type="place" className="form-control" id="exampleDropdownFormPassword1" placeholder="Place of activity" value={place} onChange={(e) => setPlace(e.target.value)} style={{marginLeft: '24px'}} />
+          </div>
+          <div className='flex'>
+          <button type="submit" onClick={Create} className="btn btn-primary" style={{color: '#ffff', fontSize: '15px', backgroundColor: '#0F2C67', marginLeft: '9.3%'}}>Create</button>
+          <button type="submit" onClick={Update} className="btn btn-primary" className='bg-[#4ade80]' style={{color: '#ffff', fontSize: '15px', marginLeft: '2%'}}>Update</button>
+          <button type="submit" onClick={Delete} className="btn btn-primary" className='bg-[#dc2626]' style={{color: '#ffff', fontSize: '15px', marginLeft: '2%'}}>Delete</button>
+          </div>
+        </form>
       {/* Table */}
-      <div className="w-full max-w-6xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
+      <div className="w-full max-w-6xl mx-auto bg-white shadow-lg rounded-sm border border-yellow-950">
         <header className="px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-800">Customers</h2>
+          <h2 className="font-semibold text-gray-800">List Aktivitasmu</h2>
         </header>
         <div className="p-3">
           <div className="overflow-x-auto">
             <table id='table' className="table-auto w-full">
-              <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+              <thead className="text-xs font-semibold uppercase text-gray-400 ">
                 <tr>
                   <th className="p-2 whitespace-nowrap">
                     <div className="font-semibold text-left">Name</div>
                   </th>
                   <th className="p-2 whitespace-nowrap">
-                    <div className="font-semibold text-left">Email</div>
+                    <div className="font-semibold text-left">Time</div>
                   </th>
                   <th className="p-2 whitespace-nowrap">
-                    <div className="font-semibold text-left">Password</div>
+                    <div className="font-semibold text-left">Place</div>
                   </th>
                   <th className="p-2 whitespace-nowrap">
                     <div className="font-semibold text-center">UpdateAt</div>
@@ -206,13 +175,13 @@ export default function dashboard() {
               {data.map((item,index) => (
                       <tr key={item.id} onClick={() => handleRowClick(index)}>
                         <td className="p-2 whitespace-nowrap">{item.name}</td>
-                        <td className="p-2 whitespace-nowrap">{item.email}</td>
-                        <td className="p-2 whitespace-nowrap">{item.password}</td>
+                        <td className="p-2 whitespace-nowrap">{item.time}</td>
+                        <td className="p-2 whitespace-nowrap">{item.place}</td>
                         <td className="p-2 whitespace-nowrap">{item.updatedAt}</td>
                         <button onClick={(e) => {
                           e.stopPropagation();
                           handleButtonClick(item);
-                        }} className="p-2 whitespace-nowrap hover:shadow-form rounded-md bg-[#6A64F1] py-1 px-2 text-base font-light text-white outline-none">
+                        }} className="p-2 whitespace-nowrap hover:shadow-form rounded-md bg-yellow-950 py-1 px-2 text-base font-light text-white outline-none">
                           Pilih
                         </button>
                       </tr>

@@ -18,9 +18,9 @@ model User {
 
 model Item {
     id          Int         @id @default(autoincrement())
-    category    String       
+    time        String       
     name        String      @unique
-    price       String
+    place       String
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
 }

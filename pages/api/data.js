@@ -15,11 +15,11 @@ export default async function handler(req, res) {
 
     //  }
     if (req.method === 'POST') {
-        const { token,name,category,price } = req.body;
+        const { token,name,time,place } = req.body;
         if(!token ){
             return res.status(400).json({ message: 'Token API tidak ada' });
         }
-        if(!name || !category || !price ){
+        if(!name || !time || !place ){
             return res.status(400).json({ message: 'Tolong Inputkan nama,kategori dan juga harga' });
         }
         const confirmToken = token === JWT_SECRET;
@@ -34,8 +34,8 @@ export default async function handler(req, res) {
         const item = await prisma.item.create({
             data: {
                 name,
-                category,
-                price
+                time,
+                place
             }
         });
  
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
      }
      else if (req.method === 'PATCH') {
-        const { token,name,category,price,id } = req.body;
+        const { token,name,time,place,id } = req.body;
         if(!token ){
             return res.status(400).json({ message: 'Token API tidak ada' });
         }
@@ -56,15 +56,15 @@ export default async function handler(req, res) {
             where: { id: id },
             data: {
               name,
-              category,
-              price
+              time,
+              place
             }
         });
 
         return res.status(200).json({ message: 'Data Berhasil Diperbarui'});
 
      }
-     else if (req.method === 'DELETE') {
+     else if (req.method === 'PUT') {
         const { token,id } = req.body;
         if(!token ){
             return res.status(400).json({ message: 'Token API tidak ada' });
